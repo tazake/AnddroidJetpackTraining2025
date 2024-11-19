@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AnddroidJetpackTraining2025</string>
+    <string name="search_label">行き先・やりたいことから探す</string>
 </resources>
