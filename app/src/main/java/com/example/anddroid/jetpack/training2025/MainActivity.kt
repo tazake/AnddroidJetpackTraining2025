@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Devices.PIXEL_FOLD
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -58,42 +59,42 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    @Composable
-    private fun SearchBox() {
-        TextButton(
-            onClick = { /*TODO*/ },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color.LightGray,
-                contentColor = Color.Black
-            ),
-            shape = CircleShape,
-            modifier = Modifier
-                // ここもpaddingとbackgroundを変えると色が適用される範囲が変わる
-                .padding(vertical = 5.dp, horizontal = 12.dp)
-                .wrapContentHeight()
-                .fillMaxWidth()
+}
+
+@Composable
+fun SearchBox() {
+    TextButton(
+        onClick = { /*TODO*/ },
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.LightGray,
+            contentColor = Color.Black
+        ),
+        shape = CircleShape,
+        modifier = Modifier
+            .padding(vertical = 5.dp, horizontal = 12.dp)
+            .wrapContentHeight()
+            .fillMaxWidth()
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start, //なくてもいいけど明示的に指定しておきたい
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Start, //なくてもいいけど明示的に指定しておきたい
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Icon(
-                    //                            painter = painterResource(id = R.drawable.ic_launcher_background)
-                    painter = rememberVectorPainter(image = Icons.Default.Search),
-                    contentDescription = "Search",
-                    tint = Color.Red,
-                    modifier = Modifier.size(28.dp)
-                )
-                Spacer(modifier = Modifier.size(8.dp))
-                Text(
-                    text = stringResource(R.string.search_label),
-                    fontWeight = FontWeight.W300,
-                    fontSize = 16.sp,
-                    color = Color.Black,
-                    modifier = Modifier.wrapContentSize()
-                )
-            }
+            Icon(
+                //                            painter = painterResource(id = R.drawable.ic_launcher_background)
+                painter = rememberVectorPainter(image = Icons.Default.Search),
+                contentDescription = "Search",
+                tint = Color.Red,
+                modifier = Modifier.size(28.dp)
+            )
+            Spacer(modifier = Modifier.size(8.dp))
+            Text(
+                text = stringResource(R.string.search_label),
+                fontWeight = FontWeight.W300,
+                fontSize = 16.sp,
+                color = Color.Black,
+                modifier = Modifier.wrapContentSize()
+            )
         }
     }
 }
@@ -112,4 +113,14 @@ fun GreetingPreview() {
     AnddroidJetpackTraining2025Theme {
         Greeting("Android")
     }
+}
+
+@Preview(showBackground = true, name = "small font", fontScale = 0.5f)
+@Preview(showBackground = true, name = "normal font")
+@Preview(showBackground = true, name = "large font", fontScale = 1.5f)
+@Preview(device = "spec:width=720px,height=1280px,dpi=300", locale = "ja", fontScale = 1.3f)
+@Preview(device = PIXEL_FOLD, locale = "ja", fontScale = 1.3f)
+@Composable
+fun SearchBoxPreview() {
+    SearchBox()
 }
