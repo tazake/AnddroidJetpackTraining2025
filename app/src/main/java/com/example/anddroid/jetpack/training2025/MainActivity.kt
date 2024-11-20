@@ -24,6 +24,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -116,7 +117,7 @@ fun PersonaTab() {
     val titles = listOf("Tab 1", "Tab 2", "Tab 3")
 
     Column {
-        PrimaryTabRow(selectedTabIndex = state) {
+        SecondaryTabRow(selectedTabIndex = state) {
             titles.forEachIndexed { index, title ->
                 Tab(
                     selected = state == index,
