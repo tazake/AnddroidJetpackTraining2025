@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,11 +19,11 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.PrimaryTabRow
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.Tab
@@ -44,7 +45,13 @@ import androidx.compose.ui.tooling.preview.Devices.PIXEL_FOLD
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.anddroid.jetpack.training2025.ui.theme.AnddroidJetpackTraining2025Theme
+
+//TODO : option + 上下で関数を範囲選択が可能
+//TODO : そのまま、option + command + mで関数に切り出し
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,30 +59,61 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             AnddroidJetpackTraining2025Theme {
-                Scaffold(
-                    modifier = Modifier.fillMaxSize(),
-                ) { innerPadding ->
-                    Column(
-                        modifier = Modifier
-                            // paddingとbackgroundを変えると色が適用される範囲が変わる
-                            .padding(innerPadding)
-                            .background(Color.White)
-                            .fillMaxSize()
-                    ) {
-                        SearchBox()
-                        PersonaTab()
+                val navController = rememberNavController()
+
+                NavHost(navController = navController, startDestination = "top") {
+                    composable("top") {
+                        TopScreen(onClick = { navController.navigate("second") })
+                    }
+                    composable("second") {
+                        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                            Box(modifier = Modifier.padding(innerPadding)) {
+                                Button(onClick = { navController.navigate("third") }) {
+                                    Text("Second Screen")
+                                }
+                            }
+                        }
+                    }
+                    composable("third") {
+                        Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                            Box(modifier = Modifier.padding(innerPadding)) {
+                                Button(onClick = { navController.popBackStack() }) {
+                                    Text("Third Screen")
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
-    }
 
+    }
 }
 
 @Composable
-fun SearchBox() {
+private fun TopScreen(onClick: () -> Unit) {
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+    ) { innerPadding ->
+        Column(
+            modifier = Modifier
+                // TODO : これわすれた1
+                // paddingとbackgroundを変えると色が適用される範囲が変わる
+                .padding(innerPadding)
+                .background(Color.White)
+                .fillMaxSize()
+        ) {
+            SearchBox(onClick = onClick)
+            PersonaTab()
+        }
+    }
+}
+
+
+@Composable
+fun SearchBox(onClick: () -> Unit) {
     TextButton(
-        onClick = { /*TODO*/ },
+        onClick = onClick,
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.LightGray,
             contentColor = Color.Black
@@ -113,7 +151,7 @@ fun SearchBox() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PersonaTab() {
-    var state by remember { mutableIntStateOf(0) }
+    var state by remember { mutableIntStateOf(0) } //TODO: これわすれた2
     val titles = listOf("Tab 1", "Tab 2", "Tab 3")
 
     Column {
@@ -160,5 +198,5 @@ fun GreetingPreview() {
 @Preview(device = PIXEL_FOLD, locale = "ja", fontScale = 1.3f)
 @Composable
 fun SearchBoxPreview() {
-    SearchBox()
+    SearchBox(onClick = {})
 }
